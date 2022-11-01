@@ -1,0 +1,64 @@
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <h1 class="title">レシピ一覧</h1>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-multiline">
+      <% @recipes.each do |recipe| %>
+        <div class="column is-4">
+          <div class="card">
+            <div class="card-content">
+              <div class="card-image">
+                <figure class="image img-container-recipe-index">
+                  <%= link_to recipe_path(recipe) do %>
+                    <%= image_tag recipe.image_id.to_s, fallback: "no-image.png" %>
+                  <% end %>
+                </figure>
+              </div>
+  
+              <div class="media mt-5">
+                <figure class="media-left">
+                  <div class="image is-48x48">
+                    <%= image_tag recipe.user.profile_image_id.to_s, fallback: "image_profile.png", class: "is-rounded" %>
+                  </div>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <div class="pt-2 parent">
+                      <%= link_to recipe.user.username, user_path(recipe.user), class: "title is-4 has-text-link" %>
+                      <div class="is-size-5">
+                        <% if current_user.likes_already_exits?(recipe) %>
+                          <%= button_to recipe_likes_path(recipe), :method => :delete, class: "link-style link-style-pink" do %>
+                            <i class="fas fa-heart"></i>
+                            <span class="black"><%= recipe.likes.count %></span>
+                          <% end %>
+                         
+                        <% else %>
+                          <%= button_to recipe_likes_path(recipe), :method => :post, class: "link-style" do %>
+                            <i class="far fa-heart"></i>
+                            <%= recipe.likes.count %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="content ml-1 .is-marginless">
+                <time>
+                  <%= recipe.updated_at.strftime("%Y-%m-%d %H:%M") %>
+                  <span>更新</span>
+                </time>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
